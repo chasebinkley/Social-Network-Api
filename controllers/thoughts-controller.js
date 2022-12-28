@@ -6,7 +6,7 @@ module.exports = {
       .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
   },
-  getSingleThoughts(req, res) {
+  getThoughtsById(req, res) {
     Thoughts.findOne({ _id: req.params.thoughtsId })
       .then((thoughts) =>
         !thoughts
@@ -74,10 +74,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Add a thoughts response
-  addThoughtsResponse(req, res) {
+  addThoughtsReactions(req, res) {
     Thoughts.findOneAndUpdate(
       { _id: req.params.thoughtsId },
-      { $addToSet: { responses: req.body } },
+      { $addToSet: { reactions: req.body } },
       { runValidators: true, new: true }
     )
       .then((thoughts) =>
@@ -88,10 +88,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Remove thoughts response
-  removeThoughtsResponse(req, res) {
+  removeThoughtsReactions(req, res) {
     Thoughts.findOneAndUpdate(
       { _id: req.params.thoughtsId },
-      { $pull: { reactions: { responseId: req.params.responseId } } },
+      { $pull: { reactions: { reactionsId: req.params.reactionsId } } },
       { runValidators: true, new: true }
     )
       .then((thoughts) =>
@@ -102,3 +102,5 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 };
+
+module.exports = thoughtsController;

@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const UserSchema = new Schema({
+const UsersSchema = new Schema(
+    {
     username: {
         type: String,
         unique: true,
@@ -11,23 +12,33 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        // use REGEX to validate email
-        match: [/.+@.+\..+/]
+        // use REGEX to validate correct email
+        match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/]
     },
     thoughts: [{
         type: Schema.Types.ObjectId,
-        ref: 'Thought'
+        ref: 'Thoughts'
     }],
     friends: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Users'
     }]
-},
-{
+    },
+    {
     toJSON: {
-        virtuals: true
+        virtuals: true,
     },
     id: false
+    }
+)
+
+// get total count of friends
+UsersSchema.virtual('friendCount').get(function() {
+    return this.friends.length;
 })
 
-module.exports = User;
+// create the Users model using the Users Schema
+const Users = model('Users', UsersSchema);
+
+// export Users module
+module.exports = Users;
