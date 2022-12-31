@@ -1,6 +1,7 @@
-const User = require('../models/Users');
+const User = require('../models/users');
 
-module.exports = {
+const usersController = {
+
   getAllUsers(req, res) {
     User.find()
       .then((users) => res.json(users))
