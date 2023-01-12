@@ -16,7 +16,7 @@ const thoughtsController = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // create a new thought
+  // create a new thoughts
   createThoughts(req, res) {
     Thoughts.create(req.body)
       .then((thoughts) => {
@@ -29,7 +29,7 @@ const thoughtsController = {
       .then((user) =>
         !user
           ? res.status(404).json({
-              message: 'Thoughts created, but found no user with that ID',
+              message: 'thoughts created, but found no user with that ID',
             })
           : res.json('Created the thoughts 💭')
       )
@@ -69,35 +69,35 @@ const thoughtsController = {
         !user
           ? res
               .status(404)
-              .json({ message: 'Thoughts created but no user with this id!' })
-          : res.json({ message: 'Thoughts successfully deleted!' })
+              .json({ message: 'thoughts created but no user with this id!' })
+          : res.json({ message: 'thoughts successfully deleted!' })
       )
       .catch((err) => res.status(500).json(err));
   },
   // Add a thoughts reactions
   addReaction({params, body}, res) {
-    Thoughts.findOneAndUpdate({_id: params.thoughtId}, {$push: {reactions: body}}, {new: true, runValidators: true})
+    Thoughts.findOneAndUpdate({_id: params.thoughtsId}, {$push: {reactions: body}}, {new: true, runValidators: true})
     .populate({path: 'reactions', select: '-__v'})
     .select('-__v')
-    .then(dbThoughtsData => {
-    if (!dbThoughtsData) {
+    .then(dbthoughtsData => {
+    if (!dbthoughtsData) {
         res.status(404).json({message: 'No thoughts with this particular ID!'});
         return;
     }
-    res.json(dbThoughtsData);
+    res.json(dbthoughtsData);
     })
     .catch(err => res.status(400).json(err))
   },
   // Remove thoughts response
   deleteReaction({ params, body }, res) {
-    Thought.findOneAndUpdate(
-        { _id: params.thoughtId },
+    Thoughts.findOneAndUpdate(
+        { _id: params.thoughtsId },
         { $pull: { reactions: { reactionsId: body.reactionsId } } },
         { new: true, runValidators: true }
     )
-    .then(dbThoughtData => {
-        if (!dbThoughtData) {
-            res.status(404).json({ message: 'No thought found with this id' });
+    .then(dbthoughtsData => {
+        if (!dbthoughtsData) {
+            res.status(404).json({ message: 'No thoughts found with this id' });
             return;
         }
         res.json({message: 'Successfully deleted the reaction'});
